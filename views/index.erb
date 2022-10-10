@@ -1,0 +1,18 @@
+<style>
+.center-cropped {
+  width: 240px;
+  height: 240px;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+</style>
+
+<div class="">
+<% attendees.each do |attendee| %>
+  <form method="POST" action="/attendee">
+    <p><%= attendee["name"] %></p>
+    <input type="hidden" value="<%=attendee["memberId"]%>" name="id">
+    <input type="submit" value="" class="center-cropped" style="background-image: url('./member_<%=attendee["memberId"]%>.jpeg")>
+  </form>
+<% end %>
+</div>
