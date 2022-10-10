@@ -3,6 +3,9 @@ require 'sinatra'
 require "sinatra/reloader"
 require 'json'
 require 'prawn'
+
+set :bind, '0.0.0.0'
+
 get '/' do
   attendees = JSON.load_file("./attendees.json")
   erb :index, {:locals => {attendees: attendees}}
@@ -13,7 +16,8 @@ post '/attendee' do
   height = 175.7479
   Prawn::Document.generate('explicit.pdf', page_layout: :landscape, page_size: [width, height], margin:[10,20]) do |pdf|
     pdf.stroke_bounds
-    attendee = JSON.load_file("./attendees.json").find {_1["name"] == params['name']}
+    attendees = JSON.load_file("./attendees.json")
+    attendee = attendees.find {_1["name"] == params['name']}
     pdf.define_grid(columns: 2, rows: 1, gutter: 30)
     pdf.rotate(270, origin: [height/2, width/2]) do
       pdf.translate(0,-97) do
@@ -32,6 +36,17 @@ post '/attendee' do
       end
     end
   end
+  new_attendee_list = attendees.map do |i|
+    if i["name"] == attendee["name"]
+     i["printed"] = true
+     i
+    else
+      i
+    end
+ end
+ File.open("./attendees.json", 'w') { |file| file.write(new_attendee_list.to_json) }
+ `lp explicit.pdf`
   end
+
   redirect "/"
 end

@@ -1,18 +1,43 @@
-<style>
-.center-cropped {
-  width: 240px;
-  height: 240px;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Hello, world!</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./simple.css">
+  <meta name="description" content="" />
+</head>
+<body>
+  <style>
 
-<div class="">
-<% attendees.each do |attendee| %>
-  <form method="POST" action="/attendee">
-    <p><%= attendee["name"] %></p>
-    <input type="hidden" value="<%=attendee["name"]%>" name="name">
-    <input type="submit" value="" class="center-cropped" style="background-image: url('./member_<%=attendee["memberId"]%>.jpeg")>
-  </form>
-<% end %>
-</div>
+  .center-cropped {
+    width: 240px;
+    height: 240px;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+
+  </style>
+
+  <div style="display:flex; flex-direction:column">
+  <% attendees.each do |attendee| %>
+  <div style="margin:auto">
+    <% if attendee["printed"] %>
+      <div >
+        <p style="margin-bottom:4px;"><%= attendee["name"] %> </p>
+        <strong style="color:red;">ALREADY PRINTED</strong>
+        <div class="center-cropped" style="background-image: url('./member_<%=attendee["memberId"]%>.jpeg")>
+        </div>
+      </div>
+    <% else %>
+      <form method="POST" action="/attendee" >
+        <p><%= attendee["name"] %></p>
+        <input type="hidden" value="<%=attendee["name"]%>" name="name">
+        <input type="submit" value="" class="center-cropped" style="background-image: url('./member_<%=attendee["memberId"]%>.jpeg")>
+      </form>
+    <% end %>
+    </div>
+  <% end %>
+  </div>
+</body>
+</html>
