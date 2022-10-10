@@ -11,7 +11,7 @@
 <% attendees.each do |attendee| %>
   <form method="POST" action="/attendee">
     <p><%= attendee["name"] %></p>
-    <input type="hidden" value="<%=attendee["memberId"]%>" name="id">
+    <input type="hidden" value="<%=attendee["name"]%>" name="name">
     <input type="submit" value="" class="center-cropped" style="background-image: url('./member_<%=attendee["memberId"]%>.jpeg")>
   </form>
 <% end %>
